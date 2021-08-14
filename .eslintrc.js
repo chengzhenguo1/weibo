@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-08-14 17:31:44
- * @LastEditTime: 2021-08-14 17:41:19
+ * @LastEditTime: 2021-08-14 18:05:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \weibo\.eslintrc.js
@@ -28,6 +28,5 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    'semi': 'off', //语句强制分号结尾
   },
 };
