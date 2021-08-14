@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 export class UserDTO {
   @ApiProperty({
@@ -21,5 +22,6 @@ export class RegisterDTO extends UserDTO {
     default: 'chengzg',
     type: String,
   })
+  @IsNotEmpty({ message: '姓名不能为空' })
   nickName: string;
 }
