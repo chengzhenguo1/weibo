@@ -1,4 +1,6 @@
 import { NestFactory } from '@nestjs/core';
+import * as helmet from 'helmet';
+// import * as useragent from 'express-useragent';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
@@ -9,11 +11,15 @@ async function bootstrap() {
   // 设置全局前缀
   app.setGlobalPrefix('api');
 
-  // app.use(
-  //   helmet({
-  //     contentSecurityPolicy: false,
-  //   })
-  // )
+  // 预防xss攻击
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    }),
+  );
+
+  // 获取浏览器信息
+  // app.use(useragent.express());
 
   // 设置验证器
   app.useGlobalPipes(

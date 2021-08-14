@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { BlogEntity } from 'src/module/blog/blog.entity';
 
+type Role = 'admin' | 'user';
 @Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn({ comment: '用户id' })
@@ -23,6 +24,9 @@ export class UserEntity {
 
   @Column({ comment: '密码盐' })
   salt: string;
+
+  @Column({ comment: '角色 默认为user', default: 'user', length: 10 })
+  role: Role;
 
   @CreateDateColumn({ comment: '创建时间' })
   createDate: Date;
