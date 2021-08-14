@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+import { UserEntity } from '../user/user.entity';
 
 @Entity('blog')
-export class Blog {
+export class BlogEntity {
   @PrimaryGeneratedColumn({ comment: '文章名' })
   id: number;
 
@@ -28,6 +28,6 @@ export class Blog {
   @UpdateDateColumn({ comment: '更新时间' })
   updateDate: Date;
 
-  @ManyToOne(() => User, (user) => user.blogs)
-  user: User;
+  @ManyToOne(() => UserEntity, (user) => user.blogs)
+  user: UserEntity;
 }

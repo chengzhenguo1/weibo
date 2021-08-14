@@ -5,10 +5,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Blog } from 'src/module/blog/blog.entity';
+import { BlogEntity } from 'src/module/blog/blog.entity';
 
 @Entity('user')
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn({ comment: '用户id' })
   id: number;
 
@@ -27,6 +27,6 @@ export class User {
   @CreateDateColumn({ comment: '创建时间' })
   createDate: Date;
 
-  @OneToMany(() => Blog, (blog) => blog.user)
-  blogs: Blog[];
+  @OneToMany(() => BlogEntity, (blog) => blog.user)
+  blogs: BlogEntity[];
 }
