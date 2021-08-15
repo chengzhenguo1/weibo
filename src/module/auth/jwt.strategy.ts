@@ -1,4 +1,3 @@
-// src/logical/auth/jwt.strategy.ts
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
@@ -21,6 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       id: payload.id,
       userName: payload.userName,
+      passWord: payload.passWord,
       nickName: payload.nickName,
       role: payload.role,
     };

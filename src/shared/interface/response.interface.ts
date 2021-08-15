@@ -1,7 +1,4 @@
 export interface ResponseRO {
-  // Is request success?
-  success: boolean;
-
   // Message
   message: string;
 

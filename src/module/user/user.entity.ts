@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { BlogEntity } from 'src/module/blog/blog.entity';
 
-type Role = 'admin' | 'user';
+export type Role = 'admin' | 'user';
 @Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn({ comment: '用户id' })

@@ -67,7 +67,7 @@ export class AuthService {
         `${user.id}-${user.userName}`,
         `${token}`,
         'EX',
-        30,
+        3000,
       );
 
       console.log(token);
@@ -76,14 +76,12 @@ export class AuthService {
         data: {
           token,
         },
-        success: true,
         message: `登录成功`,
       };
     } catch (error) {
       console.log(error);
       return {
         statusCode: 400,
-        success: false,
         message: `账号或密码错误`,
       };
     }

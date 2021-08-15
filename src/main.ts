@@ -33,7 +33,6 @@ async function bootstrap() {
       exceptionFactory: (validationErrors = []) => {
         throw new HttpException(
           {
-            success: false,
             message: Object.values(validationErrors[0].constraints)[0],
             statusCode: HttpStatus.BAD_REQUEST,
           },

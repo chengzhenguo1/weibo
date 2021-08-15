@@ -28,17 +28,12 @@ export class UserService {
       throw new BadRequestException({
         statusCode: HttpStatus.BAD_REQUEST,
         message: '两次密码不一致',
-        success: false,
       });
     }
 
     const user = await this.findOne(userName);
     if (user) {
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: '用户已存在',
-        success: false,
-      });
+      throw new BadRequestException('用户已存在');
     }
 
     const salt = makeSalt(); // 制作密码盐

@@ -1,6 +1,9 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/shared/decorator/roles.decorator';
+import { Role } from 'src/shared/enum/role.enum';
+import { RbacGuard } from 'src/shared/guard/rbac.guard';
 import { ResponseRO } from 'src/shared/interface/response.interface';
 import { AuthService } from '../auth/auth.service';
 import { LoginDto, RegisterDto } from './dto/userDto';
@@ -21,7 +24,6 @@ export class UserController {
       return res;
     } catch (error) {
       return {
-        success: false,
         statusCode: 400,
         message: error.message,
       };
@@ -44,18 +46,17 @@ export class UserController {
         return {
           statusCode: 400,
           message: `账号或密码不正确`,
-          success: false,
         };
       default:
         return {
           statusCode: 400,
           message: `查无此人`,
-          success: false,
         };
     }
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Roles(Role.Admin)
   @Post('findOne')
   async findOne(@Body('userName') userName: any) {
     return this.userService.findOne(userName);

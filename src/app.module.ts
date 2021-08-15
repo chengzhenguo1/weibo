@@ -8,6 +8,8 @@ import { UserModule } from './module/user/user.module';
 import { BlogModule } from './module/blog/blog.module';
 import { AuthModule } from './module/auth/auth.module';
 import { UserController } from './module/user/user.controller';
+import { APP_GUARD } from '@nestjs/core';
+import { RbacGuard } from './shared/guard/rbac.guard';
 
 @Module({
   imports: [
@@ -45,6 +47,12 @@ import { UserController } from './module/user/user.controller';
     AuthModule,
   ],
   controllers: [AppController, UserController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RbacGuard,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}
