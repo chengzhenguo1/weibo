@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import * as helmet from 'helmet';
 // import * as useragent from 'express-useragent';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { HttpException, HttpStatus, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -27,10 +27,18 @@ async function bootstrap() {
       transform: true,
       // 白名单模式，必须设置，否则不存在于dto对象中的键值也会被使用
       whitelist: true,
-      // forbidUnknownValues: true,
       transformOptions: {
         enableImplicitConversion: true,
-        // excludeExtraneousValues: true,
+      },
+      exceptionFactory: (validationErrors = []) => {
+        throw new HttpException(
+          {
+            success: false,
+            message: Object.values(validationErrors[0].constraints)[0],
+            statusCode: HttpStatus.BAD_REQUEST,
+          },
+          HttpStatus.OK,
+        );
       },
     }),
   );

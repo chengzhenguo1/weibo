@@ -31,7 +31,7 @@ export class UserEntity {
     default: '0',
     comment: '性别 0:未知, 1:男, 2: 女',
   })
-  sex: string;
+  sex: number;
 
   @Column({ comment: '城市', length: 20, nullable: true })
   city: string;
