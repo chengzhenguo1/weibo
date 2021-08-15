@@ -4,11 +4,12 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { BlogEntity } from 'src/module/blog/blog.entity';
 
 type Role = 'admin' | 'user';
-@Entity('user')
+@Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn({ comment: '用户id' })
   id: number;
@@ -25,11 +26,28 @@ export class UserEntity {
   @Column({ comment: '密码盐' })
   salt: string;
 
-  @Column({ comment: '角色 默认为user', default: 'user', length: 10 })
+  @Column({
+    type: 'decimal',
+    default: '0',
+    comment: '性别 0:未知, 1:男, 2: 女',
+  })
+  sex: string;
+
+  @Column({ comment: '城市', length: 20, nullable: true })
+  city: string;
+
+  @Column({
+    default: 'user',
+    length: 10,
+    comment: '角色 默认为user',
+  })
   role: Role;
 
   @CreateDateColumn({ comment: '创建时间' })
   createDate: Date;
+
+  @UpdateDateColumn({ comment: '更新时间' })
+  upDate: Date;
 
   @OneToMany(() => BlogEntity, (blog) => blog.user)
   blogs: BlogEntity[];

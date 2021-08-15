@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResponseRO } from 'src/interface/response.interface';
+import { ResponseRO } from 'src/shared/interface/response.interface';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { RegisterDTO } from './dto/userDto';

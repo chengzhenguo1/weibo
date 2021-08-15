@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ResponseRO } from 'src/interface/response.interface';
+import { ResponseRO } from 'src/shared/interface/response.interface';
 import { RegisterDTO } from './dto/userDto';
 import { UserService } from './user.service';
 

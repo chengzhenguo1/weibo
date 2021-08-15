@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './module/user/user.module';
 import { BlogModule } from './module/blog/blog.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -18,6 +20,23 @@ import { BlogModule } from './module/blog/blog.module';
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
       autoLoadEntities: true,
+    }),
+    RedisModule.forRoot({
+      config: {
+        host: process.env.REDIS_HOST,
+        port: +process.env.REDIS_PORT,
+        db: +process.env.REDIS_DB,
+        password: process.env.PWD,
+        keyPrefix: process.env.REDIS_KEY_PREFIX,
+        onClientCreated(client) {
+          client.on('ready', () => {
+            console.log('redis连接成功');
+          });
+          client.on('error', (err) => {
+            console.log(err);
+          });
+        },
+      },
     }),
     UserModule,
     BlogModule,
