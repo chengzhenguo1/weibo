@@ -16,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // JWT验证 - Step 4: 被守卫调用
   async validate(payload: UserEntity) {
-    console.log(`JWT验证 - Step 4: 被守卫调用`);
+    console.log(`JWT验证 - Step 4: 被守卫调用`,{payload});
     return {
       id: payload.id,
       userName: payload.userName,
@@ -24,5 +24,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       nickName: payload.nickName,
       role: payload.role,
     };
+    
   }
 }

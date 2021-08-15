@@ -16,9 +16,10 @@ export class RbacGuard implements CanActivate {
     @InjectRedis() private readonly clientDefault: Redis,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<any> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     // const user = request.user;
+    console.log(request.user);
     const requireRoles = this.reflector.getAllAndOverride<Role[]>('roles', [
       context.getHandler(),
       context.getClass(),
