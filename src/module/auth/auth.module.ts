@@ -13,7 +13,7 @@ import { jwtConstants } from './constats';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '8h' }, // token 过期时效
+      signOptions: { expiresIn: '10 days' }, // token 过期时效
     }),
     UserModule,
   ],

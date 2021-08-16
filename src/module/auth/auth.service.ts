@@ -21,7 +21,7 @@ export class AuthService {
     password: string,
   ): Promise<{ code: number; user: UserEntity }> {
     console.log('JWT验证 - Step 2: 校验用户信息');
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.getUserInfo(username);
     if (user) {
       const hashedPassword = user.passWord;
       const salt = user.salt;
@@ -50,32 +50,28 @@ export class AuthService {
 
   // JWT验证 - Step 3: 处理 jwt 签证
   async certificate(user: UserEntity): Promise<ResponseRO> {
-    const payload: any = {
+    const payload = {
       id: user.id,
       userName: user.userName,
       nickName: user.nickName,
       role: user.role,
+      token: '',
     };
 
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
     try {
       payload.token = this.jwtService.sign(payload);
-      // 存储用户
-      this.clientDefault.set(
-        `${user.id}-${user.userName}`,
-        JSON.stringify(payload),
-      );
+      // 存储用户 todo 设置时间
+      await this.clientDefault.set(user.userName, JSON.stringify(payload));
 
       return {
-        statusCode: 200,
-        data: {
-          token: payload.token,
-        },
+        code: 200,
+        data: payload,
         message: `登录成功`,
       };
     } catch (error) {
       return {
-        statusCode: 400,
+        code: 400,
         message: `账号或密码错误`,
       };
     }

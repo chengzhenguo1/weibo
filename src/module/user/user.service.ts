@@ -13,28 +13,30 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async findOne(userName: string): Promise<UserEntity> {
+  async getUserInfo(userName: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ userName });
     return user;
   }
 
   //  注册
-  async register({
+  async createUser({
     userName,
     passWord,
     cPassWord,
-    nickName,
   }: RegisterDto): Promise<UserEntity> {
     if (passWord !== cPassWord) {
       throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
+        code: HttpStatus.BAD_REQUEST,
         message: '两次密码不一致',
       });
     }
 
-    const user = await this.findOne(userName);
+    const user = await this.getUserInfo(userName);
     if (user) {
-      throw new BadRequestException('用户已存在');
+      throw new BadRequestException({
+        code: HttpStatus.BAD_REQUEST,
+        message: '用户名已存在',
+      });
     }
 
     const salt = makeSalt(); // 制作密码盐
@@ -42,24 +44,11 @@ export class UserService {
 
     const newUser = new UserEntity();
     newUser.userName = userName;
-    newUser.nickName = nickName;
+    newUser.nickName = userName;
     newUser.passWord = hashPwd;
     newUser.salt = salt;
 
     const res = await this.userRepository.save(newUser);
     return res;
-  }
-
-  private buildUserRO(user: UserEntity) {
-    const userRO = {
-      id: user.id,
-      userName: user.userName,
-      nickName: user.nickName,
-      role: user.role,
-      sex: user.sex,
-      city: user.city,
-      // token: this.generateJWT(user),
-    };
-    return userRO;
   }
 }

@@ -20,11 +20,25 @@ export class UserController {
   @Post('register')
   async register(@Body() body: RegisterDto): Promise<ResponseRO> {
     try {
-      const res = this.userService.register(body) as any;
-      return res;
+      const res = await this.userService.createUser(body);
+
+      if (res) {
+        return {
+          code: 200,
+          data: {
+            user: res,
+          },
+          message: '注册成功',
+        };
+      } else {
+        return {
+          code: 400,
+          message: '注册失败',
+        };
+      }
     } catch (error) {
       return {
-        statusCode: 400,
+        code: 400,
         message: error.message,
       };
     }
@@ -44,12 +58,12 @@ export class UserController {
         return this.authService.certificate(authResult.user);
       case 2:
         return {
-          statusCode: 400,
+          code: 400,
           message: `账号或密码不正确`,
         };
       default:
         return {
-          statusCode: 400,
+          code: 400,
           message: `查无此人`,
         };
     }
@@ -57,9 +71,21 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'))
   @UseGuards(RbacGuard)
-  @Roles(Role.Admin, Role.User)
-  @Post('findOne')
-  async findOne(@Body('userName') userName: any) {
-    return this.userService.findOne(userName);
+  @Roles(Role.User)
+  @Post('getUserInfo')
+  async getUserInfo(@Body('userName') userName: string): Promise<ResponseRO> {
+    const user = await this.userService.getUserInfo(userName);
+    if (user) {
+      return {
+        code: 200,
+        data: user,
+        message: '获取成功',
+      };
+    } else {
+      return {
+        code: 400,
+        message: '获取失败',
+      };
+    }
   }
 }

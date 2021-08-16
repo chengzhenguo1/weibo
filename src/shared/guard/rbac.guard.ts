@@ -27,15 +27,13 @@ export class RbacGuard implements CanActivate {
     const authorization = request['headers'].authorization || void 0;
     const token = authorization?.split(' ')[1]; // authorization: Bearer xxx
     const userName = request['headers'].username;
-    const id = request['headers'].id;
 
     if (!requireRoles) {
       return true;
     }
 
-    const key = `${id}-${userName}`;
+    const key = userName;
     const user = JSON.parse(await this.clientDefault.get(key));
-
     // 如果 token 不匹配，禁止访问
     if (token !== user?.token) {
       throw new UnauthorizedException('您的账号在其他地方登录，请重新登录');

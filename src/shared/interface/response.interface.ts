@@ -3,7 +3,7 @@ export interface ResponseRO {
   message: string;
 
   // Response code
-  statusCode: number;
+  code: number;
 
   // Response content
   data?: Record<string, any> | string | number;

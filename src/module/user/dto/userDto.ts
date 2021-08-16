@@ -21,14 +21,6 @@ export class LoginDto extends UserDto {}
 
 export class RegisterDto extends UserDto {
   @ApiProperty({
-    description: '用户名',
-    default: 'chengzg',
-    type: String,
-  })
-  @IsNotEmpty({ message: '用户名不能为空' })
-  nickName: string;
-
-  @ApiProperty({
     description: '重复密码',
     type: String,
   })
