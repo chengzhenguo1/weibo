@@ -8,6 +8,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Redis } from 'ioredis';
 import { Role } from 'src/module/user/user.entity';
+import { ROLES_KEY } from '../decorator/roles.decorator';
 
 @Injectable()
 export class RbacGuard implements CanActivate {
@@ -18,36 +19,29 @@ export class RbacGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    // const user = request.user;
-    console.log(request.user);
-    const requireRoles = this.reflector.getAllAndOverride<Role[]>('roles', [
+    const requireRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
     const authorization = request['headers'].authorization || void 0;
-    const token = authorization.split(' ')[1]; // authorization: Bearer xxx
+    const token = authorization?.split(' ')[1]; // authorization: Bearer xxx
+    const userName = request['headers'].username;
+    const id = request['headers'].id;
 
     if (!requireRoles) {
       return true;
     }
 
-    // 当前角色
-    const user = {
-      roles: ['admin', 'user'],
-      id: 3,
-      userName: 'a123456',
-    };
+    const key = `${id}-${userName}`;
+    const user = JSON.parse(await this.clientDefault.get(key));
 
-    const key = `${user.id}-${user.userName}`;
-    const cache = await this.clientDefault.get(key);
-
-    if (token !== cache) {
-      // 如果 token 不匹配，禁止访问
+    // 如果 token 不匹配，禁止访问
+    if (token !== user?.token) {
       throw new UnauthorizedException('您的账号在其他地方登录，请重新登录');
     }
 
-    if (!requireRoles.some((role) => user?.roles?.includes(role))) {
+    if (!requireRoles.includes(user?.role)) {
       throw new UnauthorizedException('您无此权限');
     }
 

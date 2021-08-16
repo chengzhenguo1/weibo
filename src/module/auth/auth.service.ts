@@ -1,4 +1,3 @@
-// src/logical/auth/auth.service.ts
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -51,8 +50,7 @@ export class AuthService {
 
   // JWT验证 - Step 3: 处理 jwt 签证
   async certificate(user: UserEntity): Promise<ResponseRO> {
-    console.log(user);
-    const payload = {
+    const payload: any = {
       id: user.id,
       userName: user.userName,
       nickName: user.nickName,
@@ -61,25 +59,21 @@ export class AuthService {
 
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
     try {
-      const token = this.jwtService.sign(payload);
-      // 存储TOKEN
+      payload.token = this.jwtService.sign(payload);
+      // 存储用户
       this.clientDefault.set(
         `${user.id}-${user.userName}`,
-        `${token}`,
-        'EX',
-        3000,
+        JSON.stringify(payload),
       );
 
-      console.log(token);
       return {
         statusCode: 200,
         data: {
-          token,
+          token: payload.token,
         },
         message: `登录成功`,
       };
     } catch (error) {
-      console.log(error);
       return {
         statusCode: 400,
         message: `账号或密码错误`,

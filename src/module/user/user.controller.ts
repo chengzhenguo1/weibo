@@ -6,7 +6,6 @@ import { Role } from 'src/shared/enum/role.enum';
 import { RbacGuard } from 'src/shared/guard/rbac.guard';
 import { ResponseRO } from 'src/shared/interface/response.interface';
 import { AuthService } from '../auth/auth.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { LoginDto, RegisterDto } from './dto/userDto';
 import { UserService } from './user.service';
 
@@ -56,8 +55,9 @@ export class UserController {
     }
   }
 
-  // @UseGuards(AuthGuard('jwt'))
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(RbacGuard)
+  @Roles(Role.Admin, Role.User)
   @Post('findOne')
   async findOne(@Body('userName') userName: any) {
     return this.userService.findOne(userName);

@@ -48,10 +48,10 @@ import { RbacGuard } from './shared/guard/rbac.guard';
   ],
   controllers: [AppController, UserController],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: RbacGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RbacGuard,
+    // },
     AppService,
   ],
 })

@@ -17,6 +17,7 @@ export class UserService {
     const user = await this.userRepository.findOne({ userName });
     return user;
   }
+
   //  注册
   async register({
     userName,
